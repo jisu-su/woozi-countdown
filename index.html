@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOOZI Countdown : 2027.03.14</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main-bg"></div>
+
+    <div id="main-sidebar" class="sidebar" style="display: none;">
+        <div class="nav-icon" onclick="showPage('timer-page')"><img src="timer.svg"></div>
+        <div class="nav-icon" onclick="showPage('meal-page')"><img src="뾰풀이.svg"></div>
+        <div class="nav-icon" onclick="showPage('music-page')"><img src="우주공장.jpg"></div>
+        <div class="nav-icon" onclick="showPage('fan-page')"><img src="봉봉이.svg"></div>
+    </div>
+
+    <div class="container">
+
+        <!-- TIMER -->
+        <section id="timer-page" class="page active full-screen" onclick="goToMeal()" style="cursor: pointer;">
+            <div class="timer-label">WOOZI DISCHARGE COUNTDOWN</div>
+            <div id="clock" class="countdown-display">00:00:00:00</div>
+            <p class="click-guide">Click anywhere to start</p>
+        </section>
+
+        <!-- MEAL -->
+        <section id="meal-page" class="page">
+            <div class="meal-header" style="display: flex; align-items: center; justify-content: center; gap: 20px;">
+                <button class="arrow-btn" onclick="changeWeek(-1)">〈</button>
+                <h2 id="week-title">2026년 2월 식단표</h2>
+                <button class="arrow-btn" onclick="changeWeek(1)">〉</button>
+            </div>
+            <div id="weekly-calendar" class="weekly-grid"></div>
+        </section>
+
+        <!-- MUSIC -->
+        <section id="music-page" class="page scroll-page">
+            <h2>🎸 우주공장 (Solo Songs)</h2>
+            <div class="music-grid">
+
+                <div class="music-card">
+                    <iframe src="https://www.youtube.com/embed/3vSlfwzpTf4" allowfullscreen></iframe>
+                    <div class="music-title">어떤 미래</div>
+                </div>
+
+                <div class="music-card">
+                    <iframe src="https://www.youtube.com/embed/oV_2853N4n4" allowfullscreen></iframe>
+                    <div class="music-title">Ruby</div>
+                </div>
+
+                <div class="music-card">
+                    <iframe src="https://www.youtube.com/embed/NpVaGtQUNqU" allowfullscreen></iframe>
+                    <div class="music-title">운명</div>
+                </div>
+
+                <div class="music-card">
+                    <iframe src="https://www.youtube.com/embed/mS-_ZVQ_XW0" allowfullscreen></iframe>
+                    <div class="music-title">Simple</div>
+                </div>
+
+                <div class="music-card">
+                    <iframe src="https://www.youtube.com/embed/CgZCCorcF_U" allowfullscreen></iframe>
+                    <div class="music-title">Miracle</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FAN -->
+        <section id="fan-page" class="page scroll-page">
+            <div class="fan-header">
+                <h2 style="font-size: 1.8rem; margin-bottom: 5px;">💎 캐럿 소통창</h2>
+                <p style="color: #666; font-size: 0.9rem;">우지에게 따뜻한 응원의 한마디를 남겨주세요!</p>
+            </div>
+            
+            <div class="comment-section">
+                <textarea id="comment-input" class="comment-input" placeholder="여기에 내용을 입력하세요..."></textarea>
+                <div class="submit-container">
+                    <button onclick="addComment()" class="submit-btn">등록하기</button>
+                </div>
+                <div id="comment-list" class="comment-list">
+                    </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+    <script src="meals.js"></script>
+</body>
+</html>
+

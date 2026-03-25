@@ -1,0 +1,202 @@
+:root {
+    --rose-quartz: #F7C9CB;
+    --serenity: #91A8D2;
+    --glass: rgba(255, 255, 255, 0.7); /* 살짝 더 불투명하게 해서 가독성 확보 */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body, html { width: 100%; height: 100%; font-family: 'Pretendard', sans-serif; overflow: hidden; }
+
+.main-bg {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--rose-quartz) 0%, var(--serenity) 100%);
+    z-index: -1;
+}
+
+/* 사이드바: 아이콘 비율 복구 */
+.sidebar {
+    position: fixed; left: 20px; top: 50%; transform: translateY(-50%);
+    width: 75px; background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px); border-radius: 40px; padding: 20px 0;
+    display: flex; flex-direction: column; align-items: center; gap: 20px;
+    z-index: 100; border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.nav-icon { width: 55px; height: 55px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.nav-icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; transition: 0.2s; }
+.nav-icon:hover img { transform: scale(1.1); }
+
+/* [요청] 뾰풀이(두 번째 아이콘)만 작게, 우주공장은 원래대로 */
+.sidebar div:nth-child(2) img { width: 80%; height: 80%; }
+
+/* 페이지 레이아웃 (타이머 제외 나머지) */
+.page {
+    display: none;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 85%; height: 80%; max-width: 1000px;
+    background: var(--glass); backdrop-filter: blur(20px);
+    border-radius: 30px; padding: 40px; 
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+/* [절대 사수] 카운트다운 메인 페이지 스타일 */
+#timer-page {
+    width: 100%; height: 100vh; background: transparent; box-shadow: none; backdrop-filter: none;
+    display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+}
+#timer-page.active { display: flex !important; }
+.timer-label { font-size: 1.5rem; font-weight: bold; color: #ffffff; margin-bottom: 20px; }
+.countdown-display { font-size: 5.5rem; font-weight: 900; color: #ffffff; }
+
+/* 페이지 활성화 */
+.page.active:not(#timer-page) { display: block !important; animation: fadeIn 0.3s ease-out; }
+
+/* 유튜브 2열 배치 복구 */
+.music-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; }
+.music-card iframe { width: 100%; aspect-ratio: 16/9; border-radius: 15px; border: none; }
+.music-title { margin-top: 10px; font-weight: bold; text-align: center; }
+
+/* 소통창 제목 간격 및 삭제 버튼 */
+#fan-page h2 { margin-bottom: 35px; } 
+/* 소통창 헤더 */
+.fan-header {
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+    padding-bottom: 15px;
+}
+/* 입력창 */
+.comment-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    resize: none;
+    margin-bottom: 10px;
+}
+/* 등록 버튼 컨테이너 및 버튼 */
+.submit-container {
+    display: flex;
+    justify-content: flex-end; /* 오른쪽 끝으로 이동 */
+    margin-bottom: 30px;
+}
+/* 댓글 리스트 스타일 (사진처럼) */
+.comment-item {
+    background: white;
+    padding: 18px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-left: 6px solid var(--rose-quartz); /* 세븐틴 로즈쿼츠 포인트 */
+    animation: fadeIn 0.5s ease;
+}
+
+.comment-item p {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    padding-right: 50px; /* 삭제 버튼 공간 */
+}
+
+.comment-item small {
+    color: #999;
+    font-size: 0.8rem;
+}
+/* 삭제 버튼 (사진처럼 오른쪽 상단에 작게) */
+.delete-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #fff0f0;
+    color: #ff6b6b;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    background: #ff6b6b;
+    color: white;
+}
+.submit-btn {
+    background: var(--serenity);
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.submit-btn:hover {
+    background: #7a94c0;
+    transform: translateY(-2px);
+}
+/* 식단표 한 줄에 하나씩 */
+.meal-list-container { display: flex; flex-direction: column; gap: 5px; margin-top: 10px; }
+.meal-line { font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid rgba(0,0,0,0.03); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* 타이머 페이지: 클릭 가능하게 커서 변경 및 전체 영역 확보 */
+#timer-page {
+    width: 100%;
+    height: 100vh;
+    cursor: pointer; /* 마우스 올리면 클릭 가능함 표시 */
+    z-index: 10;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.click-guide {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
+
+/* [1] 식단표 주간 달력처럼 가로로 배치 */
+.weekly-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr) !important; /* 무조건 가로 7칸 */
+    gap: 10px;
+    width: 100%;
+}
+
+/* [2] 노래창 스크롤 활성화 */
+#music-page {
+    overflow-y: auto !important; /* 스크롤이 생기게 함 */
+    max-height: 80vh; /* 화면 높이에 맞춰 제한 */
+}
+
+/* [3] 등록하기 버튼 오른쪽 아래로 (가로값은 유지하고 위치만 이동) */
+.comment-section {
+    display: flex;
+    flex-direction: column;
+}
+.submit-btn {
+    align-self: flex-end; /* 부모 컨테이너 내에서 오른쪽 끝으로 배치 */
+    margin-top: 10px;
+}
+
+/* [4] 카운트다운 잔상 방지용 투명도 설정 */
+#timer-page:not(.active) {
+    display: none !important;
+}

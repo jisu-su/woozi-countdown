@@ -1,0 +1,7 @@
+import { SOLO_SONGS } from "./music.data.js";
+import { renderMusicCards } from "./music.view.js";
+
+export function drawMusic() {
+  const musicGridEl = document.querySelector("#music-page .music-grid");
+  renderMusicCards(musicGridEl, SOLO_SONGS);
+}

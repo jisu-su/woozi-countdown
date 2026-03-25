@@ -1,3 +1,16 @@
+/**
+ * Meals fallback dataset (static).
+ *
+ * This project currently uses `FALLBACK_MEALS` as the initial/backup data.
+ *
+ * Data format (IMPORTANT):
+ * - This file exports an object map keyed by date string:
+ *   {
+ *     "YYYY-MM-DD": { menu: "메뉴1, 메뉴2, ..." }
+ *   }
+ *
+ * `meals.view.js` expects exactly this structure.
+ */
 export const FALLBACK_MEALS = {
   "2026-02-01": { menu: " 낙지삼겹새우볶음, 호박감자국, 두부구이, 깍두기" },
   "2026-02-02": { menu: " 오리불고기, 순두부찌개, 감자채볶음, 배추김치" },

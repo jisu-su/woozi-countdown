@@ -1,3 +1,12 @@
+/**
+ * Music data (static list).
+ *
+ * Each item contains:
+ * - title: display title
+ * - youtubeEmbedUrl: iframe src URL
+ *
+ * If you add/remove songs, edit this array only.
+ */
 export const SOLO_SONGS = [
   { title: "어떤 미래", youtubeEmbedUrl: "https://www.youtube.com/embed/3vSlfwzpTf4" },
   { title: "Ruby", youtubeEmbedUrl: "https://www.youtube.com/embed/oV_2853N4n4" },

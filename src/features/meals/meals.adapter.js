@@ -1,12 +1,29 @@
+/**
+ * Meals adapter.
+ *
+ * Role:
+ * - Convert an arbitrary public API response into this project's internal format
+ *   so `meals.view.js` can render the weekly calendar.
+ *
+ * Internal format expected by `meals.view.js`:
+ * {
+ *   "YYYY-MM-DD": { menu: "메뉴1, 메뉴2, ..." }
+ * }
+ *
+ * Notes for you (when you plug in a real API):
+ * - You only need to adjust the adapter mapping rules.
+ * - Keep the RETURN SHAPE exactly the same (date-keyed object map).
+ */
 export function toMealsByDate(apiResponse) {
   // 내부 포맷(예시):
   // {
   //   "2026-02-01": { menu: "..." }
   // }
 
+  // Defensive: always return an object map.
   if (!apiResponse) return {};
 
-  // 1) 이미 내부 포맷과 유사한 경우(YYYY-MM-DD 키가 있는 객체)
+  // 1) If the response already looks like the internal format, return it.
   if (typeof apiResponse === "object" && !Array.isArray(apiResponse)) {
     const keys = Object.keys(apiResponse);
     if (keys.length && keys.every((k) => /^\d{4}-\d{2}-\d{2}$/.test(k))) {
@@ -15,7 +32,8 @@ export function toMealsByDate(apiResponse) {
     }
   }
 
-  // 2) 배열/중첩된 배열 응답인 경우(공공데이터/커스텀 API에서 흔함)
+  // 2) Otherwise, find an array of records inside the response.
+  // Many APIs use one of these common top-level keys.
   const records =
     (Array.isArray(apiResponse) && apiResponse) ||
     apiResponse.items ||
@@ -26,6 +44,8 @@ export function toMealsByDate(apiResponse) {
 
   if (!Array.isArray(records)) return {};
 
+  // Convert menu-like values into a string.
+  // The view later splits by regex: `[,/]` to create individual lines.
   const normalizeMenuToString = (menu) => {
     if (!menu) return "";
     if (typeof menu === "string") return menu;
@@ -37,6 +57,7 @@ export function toMealsByDate(apiResponse) {
     return String(menu);
   };
 
+  // Convert different date representations into `YYYY-MM-DD`.
   const normalizeDateToYYYYMMDD = (dateVal) => {
     if (!dateVal) return null;
     const s = String(dateVal);
@@ -49,6 +70,7 @@ export function toMealsByDate(apiResponse) {
     return d.toISOString().slice(0, 10);
   };
 
+  // Output object map
   const out = {};
 
   for (const r of records) {

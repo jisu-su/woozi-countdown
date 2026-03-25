@@ -1,4 +1,4 @@
-# 🩷 WOOZI Discharge Countdown
+# WOOZI Discharge Countdown
 
 > **세븐틴 우지(이지훈)의 전역을 기다리는 캐럿들을 위한 카운트다운 웹사이트**  
 > 🔗 [woozi-countdown.pages.dev](https://woozi-countdown.pages.dev/)

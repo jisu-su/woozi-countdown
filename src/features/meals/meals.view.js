@@ -20,14 +20,15 @@ export function renderWeeklyCalendar({ baseDate, mealDataByDate }) {
         if (item.trim()) mealHtml += `<div class="meal-line">${item.trim()}</div>`;
       });
     } else {
-      mealHtml += '<div class="meal-line" style="color:#ccc">정보 없음</div>';
+      mealHtml += '<div class="meal-line meal-line--muted">정보 없음</div>';
     }
     mealHtml += "</div>";
 
     const isSameMonth = date.getMonth() === baseDate.getMonth() && date.getFullYear() === baseDate.getFullYear();
+    const dayClass = isSameMonth ? "calendar-day calendar-day--in-month" : "calendar-day calendar-day--out-month";
     html += `
-      <div class="calendar-day" style="background: white; border-radius: 15px; padding: 10px; min-height: 200px; opacity: ${isSameMonth ? 1 : 0.2};">
-        <div style="font-weight:bold; color:var(--serenity); margin-bottom:5px;">${date.getDate()}일</div>
+      <div class="${dayClass}">
+        <div class="calendar-day-title">${date.getDate()}일</div>
         ${mealHtml}
       </div>
     `;

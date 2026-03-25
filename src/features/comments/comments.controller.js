@@ -1,11 +1,10 @@
 import { isValidCommentText } from "./comments.schema.js";
 import { getStoredComments, setStoredComments } from "./comments.storage.js";
-import { renderComments } from "./comments.view.js";
+import { loadComments } from "./comments.view.js";
 
 export function addComment() {
   const input = document.getElementById("comment-input");
-  const listEl = document.getElementById("comment-list");
-  if (!input || !listEl) return;
+  if (!input) return;
 
   const text = input.value.trim();
   if (!isValidCommentText(text)) return;
@@ -15,7 +14,7 @@ export function addComment() {
   setStoredComments(comments);
 
   input.value = "";
-  loadComments();
+  syncComments();
 }
 
 export function deleteComment(index) {
@@ -24,11 +23,18 @@ export function deleteComment(index) {
   const comments = getStoredComments();
   comments.splice(index, 1);
   setStoredComments(comments);
-  loadComments();
+  syncComments();
 }
 
-export function loadComments() {
+function syncComments() {
   const listEl = document.getElementById("comment-list");
   if (!listEl) return;
-  renderComments(listEl, getStoredComments(), deleteComment);
+  loadComments(listEl, getStoredComments(), deleteComment);
+}
+
+export function initComments() {
+  const submitBtn = document.getElementById("comment-submit");
+  if (submitBtn) submitBtn.addEventListener("click", addComment);
+
+  syncComments();
 }

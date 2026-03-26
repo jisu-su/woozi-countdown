@@ -1,15 +1,15 @@
 /**
- * Meals fallback dataset (static).
+ * 식단 기본 데이터셋 (정적 데이터).
  *
- * This project currently uses `FALLBACK_MEALS` as the initial/backup data.
+ * 이 프로젝트는 현재 `FALLBACK_MEALS`를 초기 데이터이자, API 호출 실패 시 사용할 백업 데이터로 사용합니다.
  *
- * Data format (IMPORTANT):
- * - This file exports an object map keyed by date string:
+ * 데이터 포맷 (중요):
+ * - 이 파일은 날짜 문자열을 키(Key)로 하는 객체 맵을 내보냅니다.
  *   {
  *     "YYYY-MM-DD": { menu: "메뉴1, 메뉴2, ..." }
  *   }
  *
- * `meals.view.js` expects exactly this structure.
+ * `meals.view.js`는 정확히 이 구조의 데이터를 받아서 화면에 그립니다.
  */
 export const FALLBACK_MEALS = {
   "2026-02-01": { menu: " 낙지삼겹새우볶음, 호박감자국, 두부구이, 깍두기" },

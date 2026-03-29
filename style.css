@@ -39,7 +39,8 @@ body, html {
     font-weight: bold; 
     color: #ffffff; 
     margin-bottom: 20px; 
-    letter-spacing: 0.8px; /* 간격 살짝 추가 */
+    opacity: 0.8;      /* 1에서 0.8로 낮춤 */
+    letter-spacing: 1px; /* 글자 사이 간격을 살짝 넓혀 더 세련되게 */
 }
 
 .countdown-display { 

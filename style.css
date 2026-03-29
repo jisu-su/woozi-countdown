@@ -40,7 +40,7 @@ body, html {
     color: #ffffff; 
     margin-bottom: 20px; 
     opacity: 0.8;      /* 1에서 0.8로 낮춤 */
-    letter-spacing: 1px; /* 글자 사이 간격을 살짝 넓혀 더 세련되게 */
+    letter-spacing: 0.8px; /* 글자 사이 간격을 살짝 넓혀 더 세련되게 */
 }
 
 .countdown-display { 

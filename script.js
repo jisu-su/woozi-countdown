@@ -1,4 +1,3 @@
-// 1. 카운트다운 로직 (2027년 3월 14일 전역일 기준)
 const targetDate = new Date("March 14, 2027 00:00:00").getTime();
 
 function updateCountdown() {
@@ -11,14 +10,19 @@ function updateCountdown() {
     const s = Math.floor((distance % (1000 * 60)) / 1000);
 
     const clockEl = document.getElementById("clock");
+    
     if(clockEl) {
-        clockEl.innerHTML = `${d}d ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        // 전역일이 지났을 경우 처리
+        if (distance < 0) {
+            clockEl.innerHTML = "그가 온다";
+        } else {
+            clockEl.innerHTML = `${d}d ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
     }
 }
+
 setInterval(updateCountdown, 1000);
 
-// [중요] 페이지 로드 시 실행될 초기화 로직
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. 카운트다운 즉시 실행
     updateCountdown();
 });

@@ -23,20 +23,30 @@ export function getDDayString() {
 
 // 2. 카운트다운 업데이트 로직
 function updateCountdown() {
+    // 현재 시각을 밀리초 단위로 가져옴
     const now = new Date().getTime();
+    
+    // 목표 날짜와 현재 시각의 차이(남은 시간) 계산
     const distance = targetDate - now;
 
+    // 밀리초 단위를 일, 시, 분, 초 단위로 변환
+    // 1000ms * 60초 * 60분 * 24시간 = 하루치 밀리초
     const d = Math.floor(distance / (1000 * 60 * 60 * 24));
     const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const s = Math.floor((distance % (1000 * 60)) / 1000);
 
+    // 시간을 표시할 HTML 요소를 ID("clock")로 찾음
     const clockEl = document.getElementById("clock");
     
+    // 해당 요소가 페이지에 존재할 때만 실행
     if(clockEl) {
+        // 전역일이 지났을 경우 (남은 시간이 0보다 작을 때) 처리
         if (distance < 0) {
-            clockEl.innerHTML = "그가 온다";
+            clockEl.innerHTML = "그가 온다"; // 종료 메시지 표시
         } else {
+            // 남은 시간을 "00d 00:00:00" 형식으로 화면에 출력
+            // .padStart(2, '0'): 한 자리 숫자일 경우 앞에 '0'을 붙여 두 자리로 유지
             clockEl.innerHTML = `${d}d ${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         }
     }

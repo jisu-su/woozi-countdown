@@ -1,9 +1,10 @@
-# Cloudflare Pages Configuration
-name = "woozi-countdown" # 원래 프로젝트 명칭으로 고정
-compatibility_date = "2024-04-01"
-pages_build_output_dir = "." # 정적 파일이 있는 루트 디렉토리 지정
+# Cloudflare Pages 프로젝트 구성 파일
+name = "woozi-countdown" # 배포 시 사용될 프로젝트 이름 (woozi-countdown.pages.dev)
+compatibility_date = "2024-04-01" # 사용하는 Cloudflare 런타임의 호환성 기준 날짜
+pages_build_output_dir = "." # 정적 파일(HTML, CSS 등)이 위치한 경로 (현재 폴더)
 
+# D1 데이터베이스 바인딩 설정
 [[d1_databases]]
-binding = "DB"
-database_name = "woozi-comments"
-database_id = "23af8887-0395-4b71-afda-781b3dbb42c6"
+binding = "DB" # API 파일(functions/...)에서 데이터베이스에 접근할 때 사용할 이름
+database_name = "woozi-comments" # 생성한 D1 데이터베이스의 실제 이름
+database_id = "23af8887-0395-4b71-afda-781b3dbb42c6" # 데이터베이스 고유 ID

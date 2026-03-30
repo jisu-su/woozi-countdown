@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WOOZI Countdown : 2027.03.14</title>
+    <!-- [css] 메인 스타일과 댓글창 전용 스타일을 불러옵니다. -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="src/features/comment/comment.css">
 </head>
 <body>
 
+    <!-- [bg] 전체 배경 그라데이션 -->
     <div class="main-bg"></div>
 
-    <!-- 다이아몬드 토글 버튼 (💎) -->
+    <!-- [btn] 다이아몬드 토글 버튼 (💎) : 좌측에 고정되어 클릭 시 소통창을 엽니다. -->
     <div id="diamond-btn" class="diamond-toggle">💎</div>
 
-    <!-- 원래 페이지로 돌아가기 (선택사항) -->
+    <!-- [link] 원래 페이지로 돌아가기 버튼 (상단 좌측 화살표) -->
     <a href="https://seventeen-countdown.pages.dev" class="back-button">
         <span class="back-icon">←</span>
     </a>
@@ -26,27 +28,37 @@
             <div id="clock" class="countdown-display">00d 00:00:00</div>
         </section>
 
-        <!-- [2] 캐럿 소통창 (💎 클릭 시 모달 형태로 등장) -->
+        <!-- [2] 캐럿 소통창 (💎 클릭 시 나타나는 모달 형태의 카드 레이아웃) -->
         <section id="fan-page" class="page scroll-page">
-            <div class="card-container">
+            <div class="card-container"> <!-- 이미지 1번 스타일을 구현하기 위해 추가된 흰색 카드 박스 -->
+                
+                <!-- 상단 헤더 영역 -->
                 <div class="fan-header">
                     <h2 style="font-size: 1.8rem; margin-bottom: 5px;">💎 캐럿 소통창</h2>
                     <p style="color: #666; font-size: 0.9rem;">우지에게 따뜻한 응원의 한마디를 남겨주세요!</p>
                 </div>
 
+                <!-- 댓글 목록 및 입력을 위한 본문 영역 -->
                 <div class="comment-section">
+                    <!-- 댓글 입력창 (Textarea) -->
                     <textarea id="comment-input" class="comment-input" placeholder="여기에 내용을 입력하세요..."></textarea>
+                    
+                    <!-- 등록하기 버튼 -->
                     <div class="submit-container">
                         <button id="submit-comment" class="submit-btn">등록하기</button>
                     </div>
+
+                    <!-- 실제 댓글 목록이 자바스크립트로 그려질 위치 -->
                     <div id="comment-list" class="comment-list">
-                        <!-- 댓글이 여기에 렌더링됨 -->
+                        <!-- CommentUI.renderComments()에 의해 동적으로 데이터가 생성됨 -->
                     </div>
                 </div>
-            </div>
+
+            </div> <!-- /.card-container -->
         </section>
     </div>
 
+    <!-- [js] 메인 자바스크립트 로직 (모듈 방식)을 불러옵니다. -->
     <script type="module" src="script.js"></script>
 </body>
 </html>

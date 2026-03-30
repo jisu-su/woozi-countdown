@@ -1,11 +1,14 @@
-/* 1. Pretendard 글꼴 불러오기 */
+/* [font] Pretendard 전용 글꼴 불러오기 (이미지 1번처럼 깔끔한 가독성 제공) */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
 
+/* 전역 변수 설정 (로즈쿼츠 & 세레니티 색상) */
 :root {
     --rose-quartz: #F7C9CB;
     --serenity: #91A8D2;
+    --glass: rgba(255, 255, 255, 0.2); /* 기존의 기본 투명 배경 가이드 */
 }
 
+/* 전체 스타일 초기화 */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* 2. 글꼴 적용 및 기본 설정 */
@@ -13,54 +16,47 @@ body, html {
     width: 100%; 
     height: 100%; 
     font-family: 'Pretendard', sans-serif; 
-    overflow: hidden; 
+    overflow: hidden; /* 페이지 내부 스크롤을 막아 전체 레이아웃을 고정함 */
 }
 
+/* [bg] 로즈쿼츠 & 세레니티 그라데이션 배경 */
 .main-bg {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(135deg, var(--rose-quartz) 0%, var(--serenity) 100%);
     z-index: -1;
 }
 
-/* 3. 카운트다운 페이지 스타일 (완전 투명 배경 및 패딩 제거) */
+/* 3. 카운트다운(D-Day) 페이지 전 전용 스타일 */
 #timer-page {
     width: 100%;
     height: 100vh;
-    background: transparent !important; /* 강제 투명 */
+    background: transparent !important; /* 강제 투명 처리 */
     backdrop-filter: none !important;
-    box-shadow: none !important;
-    padding: 0 !important; /* 모달 패딩 제거 */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     cursor: pointer;
-    position: static; /* 모달처럼 가운데 정렬될 필요 없음 (100vh 사용) */
-    transform: none; /* transform 초기화 */
-    max-width: none;
 }
 
-#timer-page:not(.active) {
-    display: none !important;
-}
-
+/* 화면 중앙 D-DAY 텍스트 */
 .timer-label { 
     font-size: 2.5rem; 
     font-weight: bold; 
     color: #ffffff; 
     margin-bottom: 20px; 
     opacity: 0.8;
-    letter-spacing: 0.8px;
 }
 
+/* 숫자 표시창 (00d 00:00:00) */
 .countdown-display { 
     font-size: 6rem; 
     font-weight: 900; 
     color: #ffffff; 
 }
 
-/* 4. 뒤로가기 버튼 스타일 */
+/* [back] 뒤로가기 화살표 버튼 (상단 좌측) */
 .back-button {
     position: fixed;
     top: 30px;
@@ -78,7 +74,7 @@ body, html {
     transform: translateX(-5px);
 }
 
-/* 5. 다이아몬드 토글 버튼 */
+/* [toggle] 💎 다이아몬드 버튼 : 소통창 열기/닫기 */
 .diamond-toggle {
     position: fixed;
     left: 20px;
@@ -88,48 +84,35 @@ body, html {
     cursor: pointer;
     z-index: 1000;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
 }
 
+/* 호버 시 버튼 회전 및 커지는 효과 */
 .diamond-toggle:hover {
     transform: translateY(-50%) scale(1.2) rotate(15deg);
 }
 
-/* 6. 페이지 공통 스타일 (모달 창 전용) */
+/* 4. 페이지 전환 공통 스타일 (모달 창 스타일) */
 .page {
-    display: none;
+    display: none; /* 기본적으로는 숨겨둠 */
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     width: 85%; height: 80%; max-width: 1000px;
-    background: var(--glass); backdrop-filter: blur(20px);
-    border-radius: 30px; padding: 40px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    overflow-y: auto;
+    border-radius: 30px;
+    z-index: 50;
 }
 
+/* [fan] 소통창 전용 스타일 (흰색 카드 디자인 적용을 위해 기존 배경 무시) */
 #fan-page {
-    padding: 0; /* 내부 카드 컨테이너가 패딩을 처리함 */
-    background: transparent; /* 카드 이미지가 배경을 처리함 */
-    box-shadow: none; /* 카드 이미지가 그림자를 처리함 */
-    overflow: hidden; /* 카드의 border-radius가 잘리지 않게 함 */
+    padding: 0; 
+    background: transparent; /* 내부 card-container가 배경을 그림 */
+    box-shadow: none; 
+    overflow: hidden; 
 }
 
+/* 활성화된 페이지를 보여주는 클래스 (.active) */
 .page.active:not(#timer-page) {
     display: block !important;
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out; /* 나타날 때 페이드 인 */
 }
 
-/* 8. 애니메이션 */
+/* 애니메이션 효과 정의 */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.click-guide {
-    margin-top: 20px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 1.2rem;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.4; }
-    50% { opacity: 1; }
-    100% { opacity: 0.4; }
-}

@@ -1,17 +1,40 @@
+/**
+ * 댓글 목록 조회 (GET) 및 새 댓글 저장 (POST)
+ * 파일 경로: functions/api/comments.js
+ */
+
+// [GET] 특정 D-Day의 댓글을 페이징 처리하여 가져옵니다.
 export async function onRequestGet(context) {
   const { searchParams } = new URL(context.request.url);
-  const dday = searchParams.get('dday');
+  const dday = searchParams.get('dday');       // 필수: 조회할 날짜 (D-340 등)
+  const limit = parseInt(searchParams.get('limit') || '10'); // 선택: 한 번에 가져올 개수 (기본 10개)
+  const cursor = searchParams.get('cursor');   // 선택: 마지막으로 본 댓글의 ID (이후 데이터를 가져오기 위함)
 
   if (!dday) {
-    return new Response(JSON.stringify({ error: 'Missing dday parameter' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'dday 파라미터가 필요합니다.' }), { status: 400 });
   }
 
   try {
-    const { results } = await context.env.DB.prepare(
-      "SELECT * FROM comments WHERE dday = ? ORDER BY id DESC"
-    )
-    .bind(dday)
-    .all();
+    let results;
+    
+    // 커서(마지막 ID)가 있는 경우: 해당 ID보다 작은(더 과거의) 데이터를 가져옴
+    if (cursor) {
+      const query = await context.env.DB.prepare(
+        "SELECT * FROM comments WHERE dday = ? AND id < ? ORDER BY id DESC LIMIT ?"
+      )
+      .bind(dday, cursor, limit)
+      .all();
+      results = query.results;
+    } 
+    // 커서가 없는 경우 (최초 로딩): 가장 최신 데이터부터 가져옴
+    else {
+      const query = await context.env.DB.prepare(
+        "SELECT * FROM comments WHERE dday = ? ORDER BY id DESC LIMIT ?"
+      )
+      .bind(dday, limit)
+      .all();
+      results = query.results;
+    }
 
     return new Response(JSON.stringify(results), {
       headers: { 'Content-Type': 'application/json' }
@@ -21,14 +44,17 @@ export async function onRequestGet(context) {
   }
 }
 
+// [POST] 새로운 댓글을 데이터베이스에 저장합니다.
 export async function onRequestPost(context) {
   try {
+    // 클라이언트로부터 전달받은 JSON 데이터 추출
     const { dday, text, date } = await context.request.json();
 
     if (!dday || !text) {
-      return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
+      return new Response(JSON.stringify({ error: '내용이 누락되었습니다.' }), { status: 400 });
     }
 
+    // D1 데이터베이스에 새로운 댓글 정보 삽입
     const result = await context.env.DB.prepare(
       "INSERT INTO comments (dday, text, date) VALUES (?, ?, ?)"
     )

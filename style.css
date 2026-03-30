@@ -4,6 +4,7 @@
 :root {
     --rose-quartz: #F7C9CB;
     --serenity: #91A8D2;
+    --glass: rgba(255, 255, 255, 0.7);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,6 +33,11 @@ body, html {
     justify-content: center;
     align-items: center;
     text-align: center;
+    cursor: pointer;
+}
+
+#timer-page:not(.active) {
+    display: none !important;
 }
 
 .timer-label { 
@@ -39,8 +45,8 @@ body, html {
     font-weight: bold; 
     color: #ffffff; 
     margin-bottom: 20px; 
-    opacity: 0.8;      /* 1에서 0.8로 낮춤 */
-    letter-spacing: 0.8px; /* 글자 사이 간격을 살짝 넓혀 더 세련되게 */
+    opacity: 0.8;
+    letter-spacing: 0.8px;
 }
 
 .countdown-display { 
@@ -49,7 +55,7 @@ body, html {
     color: #ffffff; 
 }
 
-/* 4. 뒤로가기 버튼 스타일 (통합 레포와 동일) */
+/* 4. 뒤로가기 버튼 스타일 */
 .back-button {
     position: fixed;
     top: 30px;
@@ -57,12 +63,146 @@ body, html {
     text-decoration: none;
     color: white;
     font-size: 2rem;
-    opacity: 0.4; /* 평소에는 연하게 */
+    opacity: 0.4;
     transition: all 0.3s;
     z-index: 100;
 }
 
 .back-button:hover {
-    opacity: 1; /* 마우스 올리면 선명하게 */
+    opacity: 1;
     transform: translateX(-5px);
+}
+
+/* 5. 다이아몬드 토글 버튼 */
+.diamond-toggle {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2.5rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+}
+
+.diamond-toggle:hover {
+    transform: translateY(-50%) scale(1.2) rotate(15deg);
+}
+
+/* 6. 페이지 공통 스타일 */
+.page {
+    display: none;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 85%; height: 80%; max-width: 1000px;
+    background: var(--glass); backdrop-filter: blur(20px);
+    border-radius: 30px; padding: 40px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+.page.active:not(#timer-page) {
+    display: block !important;
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 7. 소통창 스타일 */
+.fan-header {
+    margin-bottom: 25px;
+    border-bottom: 2px solid rgba(0,0,0,0.05);
+    padding-bottom: 15px;
+}
+
+.comment-input {
+    width: 100%;
+    min-height: 100px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    resize: none;
+    margin-bottom: 10px;
+    font-family: inherit;
+}
+
+.submit-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 30px;
+}
+
+.submit-btn {
+    background: var(--serenity);
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.submit-btn:hover {
+    background: #7a94c0;
+    transform: translateY(-2px);
+}
+
+.comment-item {
+    background: white;
+    padding: 18px;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-left: 6px solid var(--rose-quartz);
+    animation: fadeIn 0.5s ease;
+}
+
+.comment-item p {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 8px;
+    padding-right: 50px;
+}
+
+.comment-item small {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.delete-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #fff0f0;
+    color: #ff6b6b;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-btn:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+/* 8. 애니메이션 */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.click-guide {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.2rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
 }

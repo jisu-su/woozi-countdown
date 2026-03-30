@@ -5,26 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WOOZI Countdown : 2027.03.14</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/features/comment/comment.css">
 </head>
 <body>
 
     <div class="main-bg"></div>
 
+    <!-- 다이아몬드 토글 버튼 (💎) -->
     <div id="diamond-btn" class="diamond-toggle">💎</div>
 
+    <!-- 원래 페이지로 돌아가기 (선택사항) -->
     <a href="https://seventeen-countdown.pages.dev" class="back-button">
         <span class="back-icon">←</span>
     </a>
 
     <div class="container">
-        <!-- TIMER -->
+        <!-- [1] 카운트다운 페이지 (기본 화면) -->
         <section id="timer-page" class="page active full-screen">
             <div class="timer-label">WOOZI DISCHARGE COUNTDOWN</div>
             <div id="clock" class="countdown-display">00d 00:00:00</div>
             <p class="click-guide">Click anywhere to start</p>
         </section>
 
-        <!-- FAN -->
+        <!-- [2] 캐럿 소통창 (💎 클릭 시 모달 형태로 등장) -->
         <section id="fan-page" class="page scroll-page">
             <div class="fan-header">
                 <h2 style="font-size: 1.8rem; margin-bottom: 5px;">💎 캐럿 소통창</h2>
@@ -37,11 +40,12 @@
                     <button id="submit-comment" class="submit-btn">등록하기</button>
                 </div>
                 <div id="comment-list" class="comment-list">
+                    <!-- 댓글이 여기에 렌더링됨 -->
                 </div>
             </div>
         </section>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

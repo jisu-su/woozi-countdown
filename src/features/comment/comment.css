@@ -1,19 +1,20 @@
 /* 1. 소통창 메인 카드 컨테이너 */
 .card-container {
-    background: #f8f9fc; /* 연한 블루그레이 배경 (이미지 2번 느낌) */
+    background: rgba(248, 249, 252, 0.95); /* 미세한 투명도 추가 */
     border-radius: 30px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     height: 100%;
     display: flex;
     flex-direction: column;
+    backdrop-filter: blur(10px);
 }
 
 /* 2. 카드 헤더 (구분선과 배경색 처리) */
 .fan-header {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.8);
     padding: 30px 40px;
-    border-bottom: 1.5px solid #eceef5;
+    border-bottom: 1.5px solid rgba(236, 238, 245, 0.5);
 }
 
 /* 3. 댓글 섹션 바디 (스크롤 영역) */
@@ -21,7 +22,7 @@
     padding: 30px 40px;
     flex: 1;
     overflow-y: auto;
-    background: #fdfdff;
+    background: transparent;
 }
 
 /* 4. 입력창 스타일 개선 */
@@ -68,15 +69,15 @@
     transform: translateY(-1px);
 }
 
-/* 5. 댓글 아이템 디자인 (이미지 2번과 유사하게) */
+/* 5. 댓글 아이템 디자인 (이미지 1번 스타일) */
 .comment-item {
     background: white;
-    padding: 20px 25px;
-    border-radius: 15px;
-    margin-bottom: 12px;
+    padding: 22px 28px;
+    border-radius: 18px;
+    margin-bottom: 15px;
     position: relative;
-    border: 1px solid #f0f2f7;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    border: 1px solid rgba(236, 238, 245, 0.6);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
     animation: fadeIn 0.4s ease;
 }
 
@@ -96,19 +97,20 @@
     position: absolute;
     top: 20px;
     right: 20px;
-    background: transparent;
-    color: #ffb3b3;
+    background: #fff0f0; /* 이미지 1번의 연한 핑크 배경 */
+    color: #f7c9cb;      /* 부드러운 핑크 텍스트 */
     border: none;
     font-size: 0.8rem;
+    font-weight: 600;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 5px 12px;
+    border-radius: 6px;
     transition: 0.2s;
 }
 
 .delete-btn:hover {
-    background: #fff5f5;
-    color: #ff6b6b;
+    background: #ffe4e4;
+    color: #ff9a9a;
 }
 
 /* 스크롤바 커스텀 */

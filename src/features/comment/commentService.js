@@ -26,7 +26,20 @@ export const CommentService = {
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ dday, text, date: new Date().toLocaleString() })
+                body: JSON.stringify({ 
+                    dday, 
+                    text, 
+                    date: new Date().toLocaleString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        weekday: undefined,
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true
+                    })
+                })
             });
             if (!response.ok) throw new Error('Failed to save comment');
             return await response.json();

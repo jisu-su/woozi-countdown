@@ -1,21 +1,48 @@
-/* 소통창 스타일 */
-.fan-header {
-    margin-bottom: 25px;
-    border-bottom: 2px solid rgba(0,0,0,0.05);
-    padding-bottom: 15px;
+/* 1. 소통창 메인 카드 컨테이너 */
+.card-container {
+    background: #f8f9fc; /* 연한 블루그레이 배경 (이미지 2번 느낌) */
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
+/* 2. 카드 헤더 (구분선과 배경색 처리) */
+.fan-header {
+    background: #ffffff;
+    padding: 30px 40px;
+    border-bottom: 1.5px solid #eceef5;
+}
+
+/* 3. 댓글 섹션 바디 (스크롤 영역) */
+.comment-section {
+    padding: 30px 40px;
+    flex: 1;
+    overflow-y: auto;
+    background: #fdfdff;
+}
+
+/* 4. 입력창 스타일 개선 */
 .comment-input {
     width: 100%;
-    min-height: 100px;
+    min-height: 120px;
     padding: 20px;
-    border-radius: 15px;
-    border: 1px solid rgba(0,0,0,0.1);
-    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    border: 1px solid #e1e4ed;
+    background: white;
     font-size: 1rem;
     resize: none;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: var(--serenity);
+    box-shadow: 0 0 0 3px rgba(145, 168, 210, 0.1);
 }
 
 .submit-container {
@@ -28,57 +55,70 @@
     background: var(--serenity);
     color: white;
     border: none;
-    padding: 12px 35px;
-    border-radius: 12px;
+    padding: 10px 25px;
+    border-radius: 8px;
     cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+    font-weight: 600;
+    transition: 0.2s;
+    opacity: 0.9;
 }
 
 .submit-btn:hover {
-    background: #7a94c0;
-    transform: translateY(-2px);
+    opacity: 1;
+    transform: translateY(-1px);
 }
 
+/* 5. 댓글 아이템 디자인 (이미지 2번과 유사하게) */
 .comment-item {
     background: white;
-    padding: 18px;
+    padding: 20px 25px;
     border-radius: 15px;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border-left: 6px solid var(--rose-quartz);
-    animation: fadeIn 0.5s ease;
+    border: 1px solid #f0f2f7;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    animation: fadeIn 0.4s ease;
 }
 
 .comment-item p {
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.5;
-    margin-bottom: 8px;
-    padding-right: 50px;
+    font-size: 1.05rem;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 10px;
 }
 
 .comment-item small {
-    color: #999;
-    font-size: 0.8rem;
+    color: #b0b5c1;
+    font-size: 0.85rem;
 }
 
 .delete-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    background: #fff0f0;
-    color: #ff6b6b;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    color: #ffb3b3;
     border: none;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
     transition: 0.2s;
 }
 
 .delete-btn:hover {
-    background: #ff6b6b;
-    color: white;
+    background: #fff5f5;
+    color: #ff6b6b;
+}
+
+/* 스크롤바 커스텀 */
+.comment-section::-webkit-scrollbar {
+    width: 6px;
+}
+.comment-section::-webkit-scrollbar-track {
+    background: transparent;
+}
+.comment-section::-webkit-scrollbar-thumb {
+    background: #e0e4ec;
+    border-radius: 10px;
 }

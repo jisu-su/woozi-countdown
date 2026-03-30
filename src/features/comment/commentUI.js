@@ -56,21 +56,32 @@ export const CommentUI = {
      * 댓글 시스템 초기화 및 이벤트 바인딩
      */
     init(getDDayString) {
-        // 댓글 등록 버튼
         const submitBtn = document.getElementById('submit-comment');
         const inputField = document.getElementById('comment-input');
-        if (submitBtn && inputField) {
-            submitBtn.addEventListener('click', async () => {
-                const text = inputField.value.trim();
-                if (!text) return;
 
-                const dday = getDDayString();
-                try {
-                    await CommentService.saveComment(dday, text);
-                    inputField.value = '';
-                    this.renderComments(getDDayString);
-                } catch (e) {
-                    alert("댓글 저장에 실패했습니다.");
+        const handleSave = async () => {
+            const text = inputField.value.trim();
+            if (!text) return;
+
+            const dday = getDDayString();
+            try {
+                await CommentService.saveComment(dday, text);
+                inputField.value = '';
+                this.renderComments(getDDayString);
+            } catch (e) {
+                alert("댓글 저장에 실패했습니다. (D1 바인딩 확인 필요)");
+            }
+        };
+
+        if (submitBtn && inputField) {
+            // 버튼 클릭 시 저장
+            submitBtn.addEventListener('click', handleSave);
+
+            // Enter 키 입력 시 저장 (Shift + Enter는 줄바꿈)
+            inputField.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSave();
                 }
             });
         }

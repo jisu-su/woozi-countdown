@@ -106,6 +106,13 @@ body, html {
     overflow-y: auto;
 }
 
+#fan-page {
+    padding: 0; /* 내부 카드 컨테이너가 패딩을 처리함 */
+    background: transparent; /* 카드 이미지가 배경을 처리함 */
+    box-shadow: none; /* 카드 이미지가 그림자를 처리함 */
+    overflow: hidden; /* 카드의 border-radius가 잘리지 않게 함 */
+}
+
 .page.active:not(#timer-page) {
     display: block !important;
     animation: fadeIn 0.3s ease-out;

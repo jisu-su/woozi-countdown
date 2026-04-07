@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 댓글 서비스 레이어 (Cloudflare API와 통신)
  * 파일 경로: src/features/comment/commentService.js
  */
@@ -14,8 +14,14 @@ export const CommentService = {
      */
     async fetchComments(dday, cursor = null, limit = 10) {
         try {
+            const today = new Date();
+            const dateKey = [
+                today.getFullYear(),
+                String(today.getMonth() + 1).padStart(2, '0'),
+                String(today.getDate()).padStart(2, '0')
+            ].join('-');
             // URL 파라미터 조립 (dday, limit, cursor)
-            let url = `${this.apiEndpoint}?dday=${dday}&limit=${limit}`;
+            let url = `${this.apiEndpoint}?dday=${dday}&dateKey=${dateKey}&limit=${limit}`;
             if (cursor) url += `&cursor=${cursor}`;
 
             const response = await fetch(url);
@@ -34,11 +40,18 @@ export const CommentService = {
      */
     async saveComment(dday, text) {
         try {
+            const now = new Date();
+            const dateKey = [
+                now.getFullYear(),
+                String(now.getMonth() + 1).padStart(2, '0'),
+                String(now.getDate()).padStart(2, '0')
+            ].join('-');
             const response = await fetch(this.apiEndpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    dday, 
+                body: JSON.stringify({
+                    dday,
+                    dateKey, 
                     text, 
                     // 한국 표준시(KST), 24시간 형식으로 날짜 생성 (예: 2026. 03. 30. 18:00:00 (KST))
                     date: new Date().toLocaleString('ko-KR', {
@@ -77,3 +90,4 @@ export const CommentService = {
         }
     }
 };
+

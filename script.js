@@ -16,9 +16,14 @@ const targetDate = new Date("March 14, 2027 00:00:00").getTime();
 // 1. [유틸리티] 현재 시점의 D-Day 문자열을 반환 (예: "D-340")
 // 이 함수는 댓글 시스템에서 날짜별로 댓글을 구분할 때 중요하게 쓰입니다.
 export function getDDayString() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-    const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const now = new Date();
+    const target = new Date(targetDate);
+
+    // 날짜 기준(자정)으로 D-Day 계산: 카운트다운 영향 제거
+    const nowUtc = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetUtc = Date.UTC(target.getFullYear(), target.getMonth(), target.getDate());
+
+    const d = Math.round((targetUtc - nowUtc) / (1000 * 60 * 60 * 24));
     return `D-${d}`;
 }
 

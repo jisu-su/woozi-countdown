@@ -1,5 +1,5 @@
 import { getCurrentBaseDate, setCurrentBaseDate } from "./meals.state.js";
-import { renderWeeklyCalendar } from "./meals.view.js";
+import { renderMealsStatus, renderWeeklyCalendar } from "./meals.view.js";
 let mealDataByDate = {};
 let lockYear = null;
 let lockMonth = null;
@@ -35,4 +35,8 @@ export function drawMeals() {
     baseDate: getCurrentBaseDate(),
     mealDataByDate,
   });
+}
+
+export function setMealsStatus(message) {
+  renderMealsStatus(message);
 }

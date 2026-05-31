@@ -36,3 +36,19 @@ export function renderWeeklyCalendar({ baseDate, mealDataByDate }) {
 
   container.innerHTML = html;
 }
+
+export function renderMealsStatus(message = "") {
+  const header = document.querySelector("#meal-page .meal-header");
+  if (!header) return;
+
+  let status = document.getElementById("meal-status");
+  if (!status) {
+    status = document.createElement("p");
+    status.id = "meal-status";
+    status.className = "meal-status";
+    header.insertAdjacentElement("afterend", status);
+  }
+
+  status.textContent = message;
+  status.hidden = !message;
+}

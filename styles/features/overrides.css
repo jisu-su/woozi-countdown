@@ -47,3 +47,14 @@
   color: #ccc;
 }
 
+.meal-status {
+  margin: 0.75rem auto 1rem;
+  max-width: 760px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.meal-status[hidden] {
+  display: none;
+}

@@ -9,6 +9,8 @@ node_modules/
 .env.*
 !.env.example
 !.env.sample
+.dev.vars
+.dev.vars.*
 *.local
 
 # Logs

@@ -1,75 +1,67 @@
-export function toMealsByDate(apiResponse) {
-  // 내부 포맷(예시):
-  // {
-  //   "2026-02-01": { menu: "..." }
-  // }
+const MEAL_FIELDS = [
+  ["brst", "조식"],
+  ["lunc", "중식"],
+  ["dinr", "석식"],
+  ["adspcfd", "추가"],
+];
 
-  if (!apiResponse) return {};
+function normalizeDate(rawDate) {
+  return String(rawDate || "")
+    .replace(/\(.*?\)/g, "")
+    .trim();
+}
 
-  // 1) 이미 내부 포맷과 유사한 경우(YYYY-MM-DD 키가 있는 객체)
-  if (typeof apiResponse === "object" && !Array.isArray(apiResponse)) {
-    const keys = Object.keys(apiResponse);
-    if (keys.length && keys.every((k) => /^\d{4}-\d{2}-\d{2}$/.test(k))) {
-      const looksLikeInternal = apiResponse[keys[0]] && typeof apiResponse[keys[0]].menu !== "undefined";
-      if (looksLikeInternal) return apiResponse;
-    }
+function textFrom(row, selector) {
+  return row.querySelector(selector)?.textContent?.trim() || "";
+}
+
+function getRowsFromXml(xmlString) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xmlString, "text/xml");
+  const parseError = doc.querySelector("parsererror");
+
+  if (parseError) {
+    throw new Error("Failed to parse meals XML");
   }
 
-  // 2) 배열/중첩된 배열 응답인 경우(공공데이터/커스텀 API에서 흔함)
-  const records =
-    (Array.isArray(apiResponse) && apiResponse) ||
-    apiResponse.items ||
-    apiResponse.data ||
-    apiResponse.result ||
-    apiResponse.meals ||
-    [];
+  return Array.from(doc.querySelectorAll("row"));
+}
 
-  if (!Array.isArray(records)) return {};
+export function toMealsByDate(xmlString) {
+  if (!xmlString) return {};
 
-  const normalizeMenuToString = (menu) => {
-    if (!menu) return "";
-    if (typeof menu === "string") return menu;
-    if (Array.isArray(menu)) return menu.map((x) => String(x)).join(", ");
-    if (typeof menu === "object") {
-      if (Array.isArray(menu.menu)) return menu.menu.map((x) => String(x)).join(", ");
-      if (Array.isArray(menu.dishes)) return menu.dishes.map((x) => String(x)).join(", ");
+  const mealsByDate = {};
+
+  getRowsFromXml(xmlString).forEach((row) => {
+    const dateKey = normalizeDate(textFrom(row, "dates"));
+    if (!dateKey) return;
+
+    if (!mealsByDate[dateKey]) {
+      mealsByDate[dateKey] = {
+        조식: [],
+        중식: [],
+        석식: [],
+        추가: [],
+      };
     }
-    return String(menu);
-  };
 
-  const normalizeDateToYYYYMMDD = (dateVal) => {
-    if (!dateVal) return null;
-    const s = String(dateVal);
-    if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
-    if (/^\d{8}$/.test(s)) return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`;
+    MEAL_FIELDS.forEach(([fieldName, bucketName]) => {
+      const menu = textFrom(row, fieldName);
+      if (menu) mealsByDate[dateKey][bucketName].push(menu);
+    });
+  });
 
-    const d = new Date(s);
-    if (Number.isNaN(d.getTime())) return null;
-    // Date 전용 값으로 처리 (로컬 타임존 이슈 최소화)
-    return d.toISOString().slice(0, 10);
-  };
+  return Object.fromEntries(
+    Object.entries(mealsByDate).map(([date, meals]) => {
+      const menu = MEAL_FIELDS.map(([, bucketName]) => {
+        const items = meals[bucketName];
+        if (!items.length) return "";
+        return `${bucketName}: ${items.join(" · ")}`;
+      })
+        .filter(Boolean)
+        .join(", ");
 
-  const out = {};
-
-  for (const r of records) {
-    const dateStr =
-      normalizeDateToYYYYMMDD(r.date) ||
-      normalizeDateToYYYYMMDD(r.meal_date) ||
-      normalizeDateToYYYYMMDD(r.ymd) ||
-      normalizeDateToYYYYMMDD(r.day);
-
-    if (!dateStr) continue;
-
-    const menu =
-      r.menu ||
-      r.menus ||
-      r.dishes ||
-      r.food ||
-      (r.menuName ? r.menuName : null) ||
-      "";
-
-    out[dateStr] = { menu: normalizeMenuToString(menu) };
-  }
-
-  return out;
+      return [date, { menu }];
+    }),
+  );
 }

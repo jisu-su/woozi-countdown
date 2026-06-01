@@ -5,6 +5,22 @@ import { FALLBACK_MEALS } from "../features/meals/meals.data.js";
 import { fetchMealsByMonth } from "../features/meals/meals.service.js";
 import { drawMusic } from "../features/music/music.controller.js";
 
+function getTargetMealMonth() {
+  const mealYm = new URLSearchParams(window.location.search).get("mealYm");
+  if (/^\d{6}$/.test(mealYm || "")) {
+    return {
+      year: Number(mealYm.slice(0, 4)),
+      month: Number(mealYm.slice(4, 6)),
+    };
+  }
+
+  const now = new Date();
+  return {
+    year: now.getFullYear(),
+    month: now.getMonth() + 1,
+  };
+}
+
 export function bootstrap({ fallbackMeals = FALLBACK_MEALS } = {}) {
   setMealsData(fallbackMeals);
 
@@ -13,11 +29,7 @@ export function bootstrap({ fallbackMeals = FALLBACK_MEALS } = {}) {
   drawMusic();
   drawMeals();
 
-  const now = new Date();
-  fetchMealsByMonth({
-    year: now.getFullYear(),
-    month: now.getMonth() + 1,
-  })
+  fetchMealsByMonth(getTargetMealMonth())
     .then((mealsByDate) => {
       setMealsData(mealsByDate);
       setMealsStatus("");

@@ -1,6 +1,7 @@
 const MND_MEALS_SERVICE = "DS_TB_MNDT_DATEBYMLSVC_ATC";
 const DEFAULT_START_INDEX = 1;
 const DEFAULT_END_INDEX = 300;
+const UPSTREAM_TIMEOUT_MS = 7000;
 
 function jsonResponse(body, init = {}) {
   return new Response(JSON.stringify(body), {
@@ -13,12 +14,13 @@ function jsonResponse(body, init = {}) {
 }
 
 export async function onRequestGet({ request, env }) {
-  const apiKey = env.MND_API_KEY;
+  const apiKey = env.MND_API_KEY?.trim();
   if (!apiKey) {
     return jsonResponse({ error: "MND_API_KEY is not configured" }, { status: 500 });
   }
 
   const { searchParams } = new URL(request.url);
+  const debug = searchParams.get("debug") === "1";
   const ym = searchParams.get("ym");
   if (!/^\d{6}$/.test(ym || "")) {
     return jsonResponse({ error: "Invalid ym. Expected YYYYMM." }, { status: 400 });
@@ -35,20 +37,53 @@ export async function onRequestGet({ request, env }) {
   );
   apiUrl.searchParams.set("YM", ym);
 
-  const response = await fetch(apiUrl.toString(), {
-    headers: {
-      accept: "application/xml,text/xml,*/*",
-    },
-  });
+  if (debug) {
+    return jsonResponse({
+      ok: true,
+      keyConfigured: true,
+      ym,
+      startIndex,
+      endIndex,
+      upstreamUrlShape: `https://openapi.mnd.go.kr/[MND_API_KEY]/xml/${MND_MEALS_SERVICE}/${startIndex}/${endIndex}/?YM=${ym}`,
+    });
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS);
+  let response;
+
+  try {
+    response = await fetch(apiUrl.toString(), {
+      signal: controller.signal,
+      headers: {
+        accept: "application/xml,text/xml,*/*",
+      },
+    });
+  } catch (error) {
+    const isTimeout = error?.name === "AbortError";
+    return jsonResponse(
+      {
+        error: isTimeout ? "MND API request timed out" : "Failed to request MND API",
+        detail: error?.message || String(error),
+        ym,
+      },
+      { status: isTimeout ? 504 : 502 },
+    );
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   const xml = await response.text();
   if (!response.ok) {
-    return new Response(xml || "Failed to fetch meals", {
-      status: response.status,
-      headers: {
-        "content-type": "text/plain; charset=utf-8",
+    return jsonResponse(
+      {
+        error: "MND API returned an error",
+        upstreamStatus: response.status,
+        upstreamBodyPreview: xml.slice(0, 500),
+        ym,
       },
-    });
+      { status: 502 },
+    );
   }
 
   return new Response(xml, {

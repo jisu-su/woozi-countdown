@@ -1,5 +1,6 @@
 import { getCurrentBaseDate, setCurrentBaseDate } from "./meals.state.js";
 import { renderMealsStatus, renderWeeklyCalendar } from "./meals.view.js";
+
 let mealDataByDate = {};
 let lockYear = null;
 let lockMonth = null;

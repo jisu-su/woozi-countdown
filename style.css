@@ -40,20 +40,29 @@ body, html {
     cursor: pointer;
 }
 
-/* 화면 중앙 D-DAY 텍스트 */
-.timer-label { 
-    font-size: 2.5rem; 
-    font-weight: bold; 
-    color: #ffffff; 
-    margin-bottom: 20px; 
+/* 화면 중앙 D-DAY 텍스트.
+   2.5rem 고정이던 시절에는 좁은 화면에서 세 줄로 쪼개졌다.
+   vw로 화면 폭에 비례시키고 clamp로 위아래를 묶는다. */
+.timer-label {
+    font-size: clamp(1.05rem, 5.2vw, 2.5rem);
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 0.5em;
     opacity: 0.8;
+    text-align: center;
+    padding: 0 5vw;
 }
 
-/* 숫자 표시창 (00d 00:00:00) */
-.countdown-display { 
-    font-size: 6rem; 
-    font-weight: 900; 
-    color: #ffffff; 
+/* 숫자 표시창 (00d 00:00:00)
+   6rem 고정이라 좁은 화면에서 두 줄로 쪼개지고 좌우가 화면 밖으로
+   넘쳤다. 넓은 화면에서는 종전과 같은 6rem이다.
+   tabular-nums는 매초 숫자 폭이 흔들리는 것을 막는다. */
+.countdown-display {
+    font-size: clamp(1.9rem, 11.5vw, 6rem);
+    font-weight: 900;
+    color: #ffffff;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 /* [back] 뒤로가기 화살표 버튼 (상단 좌측) */
@@ -116,3 +125,39 @@ body, html {
 
 /* 애니메이션 효과 정의 */
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+/* ==========================================================================
+   좁은 화면 대응
+
+   💎 버튼이 화면 왼쪽 한가운데 고정돼 있어 모바일에서 카운트다운 숫자와
+   겹쳤다. 아래 가운데로 내려 겹치지 않게 한다. 소통창이 열려도 패널
+   바깥이라 가려지지 않는다.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+    .back-button {
+        top: 16px;
+        left: 18px;
+        font-size: 1.6rem;
+    }
+
+    .diamond-toggle {
+        top: auto;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2rem;
+    }
+
+    .diamond-toggle:hover {
+        transform: translateX(-50%) scale(1.15) rotate(15deg);
+    }
+
+    /* 화면이 좁으니 소통창이 쓸 수 있는 면적을 넓힌다. */
+    .page {
+        width: 92%;
+        height: 84%;
+        border-radius: 24px;
+    }
+}

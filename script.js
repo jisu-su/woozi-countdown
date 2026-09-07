@@ -11,7 +11,12 @@ import { CommentUI } from './src/features/comment/commentUI.js';
  */
 
 // 목표로 하는 전역 날짜 설정
-const targetDate = new Date("March 14, 2027 00:00:00").getTime();
+//
+// 타임존을 붙이지 않으면 브라우저가 "보는 사람의 로컬 자정"으로 해석한다.
+// 그러면 해외에서 접속했을 때 한국 기준 전역 시각과 최대 하루 가까이
+// 어긋난다. 우지가 돌아오는 순간은 한국시간 하나뿐이므로 +09:00을 명시한다.
+// (허브 seventeen-countdown 도 같은 기준을 쓴다)
+const targetDate = new Date("2027-03-14T00:00:00+09:00").getTime();
 
 // 1. [유틸리티] 현재 시점의 D-Day 문자열을 반환 (예: "D-340")
 // 이 함수는 댓글 시스템에서 날짜별로 댓글을 구분할 때 중요하게 쓰입니다.

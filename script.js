@@ -1,4 +1,5 @@
 import { CommentUI } from './src/features/comment/commentUI.js';
+import { setupDiamondUnlock } from './src/features/diamond/diamond.js';
 
 /**
  * 우지 전역일 카운트다운 및 앱 메인 매니저
@@ -77,6 +78,10 @@ const AppManager = {
 
         // [2] 댓글 UI 시스템 초기화 (이벤트 바인딩)
         CommentUI.init(getDDayString);
+
+        // [2-1] 전역일이 지났으면 화면을 눌러 다이아몬드를 해금할 수 있게 한다.
+        //       그 전에는 아무 일도 하지 않는다.
+        setupDiamondUnlock(targetDate);
 
         // [3] 다이아몬드 버튼(💎) 클릭 : 타이머 <-> 소통창 전환
         const diamondBtn = document.getElementById('diamond-btn');

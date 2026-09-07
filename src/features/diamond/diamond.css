@@ -1,0 +1,81 @@
+/* ==========================================================================
+   다이아몬드 해금 연출
+   파일 경로: src/features/diamond/diamond.css
+
+   허브(seventeen-countdown)의 packages/shared/style.css 에서 다이아몬드
+   관련 규칙만 옮겨왔다. 색이나 타이밍을 고칠 일이 생기면 허브 쪽도 함께.
+   ========================================================================== */
+
+.diamond-cell {
+    fill: rgba(255, 255, 255, 0.03);
+    stroke: var(--diamond-clear-line);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-opacity: 0.38;
+    transition: fill 1.2s ease-in-out, stroke-opacity 1.2s ease-in-out;
+}
+
+.diamond-cell.active {
+    fill: var(--diamond-active-fill);
+    stroke-opacity: 0.85;
+}
+
+/* 우지의 칸. 뒤늦게 켜지면서 한 번 반짝인다. */
+.diamond-cell.is-new {
+    animation: wooziCellGlow 1.6s ease-in-out 3;
+}
+
+@keyframes wooziCellGlow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgba(111, 184, 255, 0.5)); }
+    50%      { filter: drop-shadow(0 0 18px rgba(185, 231, 255, 1)); }
+}
+
+/* 전역일이 지나면 화면을 누를 수 있다는 표시 */
+.is-unlockable {
+    cursor: pointer;
+}
+
+.diamond-unlock-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(20, 52, 102, 0.24);
+    pointer-events: none;
+    animation: diamondOverlayIn 0.35s ease-out both;
+}
+
+.diamond-unlock-overlay.is-leaving {
+    animation: diamondOverlayOut 0.7s ease-in both;
+}
+
+.diamond-unlock-svg {
+    width: min(74vw, 460px);
+    height: auto;
+    filter: drop-shadow(0 0 24px rgba(185, 231, 255, 0.72));
+    animation: diamondUnlockPulse 1.8s ease-in-out both;
+}
+
+@keyframes diamondOverlayIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes diamondOverlayOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+@keyframes diamondUnlockPulse {
+    0%   { opacity: 0; transform: scale(0.76); }
+    45%  { opacity: 1; transform: scale(1.04); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 움직임을 줄여달라고 설정한 사용자에게는 반짝임과 확대를 끈다. */
+@media (prefers-reduced-motion: reduce) {
+    .diamond-cell.is-new { animation: none; }
+    .diamond-unlock-svg { animation: none; }
+}
